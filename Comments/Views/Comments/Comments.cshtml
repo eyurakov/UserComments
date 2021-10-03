@@ -1,0 +1,36 @@
+﻿@model Comments
+
+
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+<header>
+
+    <div class="head">
+        <p>It's my comments</p>
+    </div>
+
+</header>
+
+
+<div class="new_user">
+    @using (Html.BeginForm("Save", "Comments"))
+    {
+
+        @Html.LabelFor(m => m.UserName)
+        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.UserName)
+
+        <br>
+        @Html.LabelFor(m => m.Comment)
+        @Html.TextAreaFor(m => m.Comment, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Comment)
+        <br>
+        @Html.HiddenFor(m => m.Id)
+
+        <button type="submit" class="btn">Save</button>
+
+    }
+</div>
+
+@section scripts{
+    <script src="@Url.Content("~/bundle/index.js")"></script>
+}
