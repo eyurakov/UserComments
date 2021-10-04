@@ -15,6 +15,7 @@
         name: 'AddComment',
         data() {
             return {
+                id: 0,
                 userName: '',
                 commentText: ''
             }
@@ -32,54 +33,40 @@
                         commentText: this.commentText,
                         completed: false
                     }
-
-                    let headers = {
-                        
-                        'Access-Control-Allow-Origin': '*',
-                        //'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
-                        //'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
-                        'Content-Type': 'application/json'
-                    };
-
-                    
-                    //axios.post('http://localhost:5001/Comments/Add', newComment, {headers})
-                    const requestOptions = {
-                        method: "POST",
-                        headers:  headers ,
-                        mode: "no-cors",
-                       body: JSON.stringify(newComment)
-                    };
-                    fetch('http://localhost:5001/Comments/Add', requestOptions)
-                    .then((response) => {
-                            return response.json();
-                        })
-                        .then((data) => {
-                            console.log(data);
+                    //http://localhost:5001/Comments/Add?userName=${this.userName}&commentText=${this.commentText}
+                    const url = 'http://localhost:5001/Comments/Add?userName=' + this.userName + '&commentText=' + this.commentText
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(json => {
+                            this.comments = json
                         });
 
+                    //const requestOptions = {
+                    //    method: "POST",
+                    //    headers: {
 
-                    //fetch('https://localhost:5001/Comments/Add',
-                    //    {
-                    //        method: 'POST',
-                    //        body: JSON.stringify(newComment)
-                    //        //,
-                    //        //headers: {
-                    //        //    "Accept": "application/json",
-                    //        //    "Access-Control-Allow-Origin": "*",
-                    //        //    "X-Requested-With": "XMLHttpRequest",
-                    //        //    "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
-                    //        //    "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
-                    //        //    'Content-Type': 'application/json'
-                    //        //}
-                    //    })
-                    //    .then((response) => {
-                    //        return response.json();
+                    //        'Access-Control-Allow-Origin': '*',
+                    //        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
+                    //        'Access-Control-Allow-Headers': 'Content-Type',
+                    //        'Content-Type': 'application/json',
+                    //        'Accept': 'application/json'
+                    //    },
+                    //    mode: "no-cors",
+                    //    body:newComment
+                    //};
+
+                    //fetch('http://localhost:5001/Comments/Add', requestOptions)
+                    //    .then(response => {
+                    //        return response.text()
                     //    })
                     //    .then((data) => {
-                    //        console.log(data);
-                    //    });
+                    //        console.log(data)
+                    //    })
+                    //    .catch((error) => {
+                    //        console.log(error)
+                    //    })
 
-                    this.$emit('add-comment', newComment)
+                    this.$emit('get-comment')
                 }
             }
         }

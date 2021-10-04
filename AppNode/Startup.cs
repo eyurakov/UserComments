@@ -1,3 +1,4 @@
+using AppNode.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,6 @@ namespace AppNode
         }
 
         public IConfiguration Configuration { get; }
-        readonly string MyCors = "MyPolicy";
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -29,6 +29,8 @@ namespace AppNode
             services.AddSwaggerGen();
 
             services.AddScoped<CommentsContext>();
+            services.AddScoped<IDbService, DbService>();
+
             services.AddCors(o => o.AddDefaultPolicy(builder =>
             {
                 builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:8080/", "http://localhost:5001/");

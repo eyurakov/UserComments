@@ -2,13 +2,14 @@
     <div id="app">
        <h1>Comments application</h1>
         <AddComment
-                @add-comment="addComment"
+                @get-comment="getComments"
                     />
         <hr>
         <CommentsList
                       v-if="comments.length"
                       v-bind:comments="comments"
                       @remove-comment="removeComment"
+                      @get-comment="getComments"
         />
         <p v-else>No comments!</p>
     </div>
@@ -29,21 +30,34 @@
             }
         },
         mounted() {
-                       
-            fetch('http://localhost:5001/Comments/GetComments')
-                .then(response => response.json())
-                .then(json => {
-                    this.comments = json
-                });
+
+            this.getComments();
         },
         methods: {
-            removeComment(id) {
-                this.comments = this.comments.filter(c => c.id !== id)
-
+            getComments() {
+                fetch('http://localhost:5001/Comments/GetComments')
+                    .then(response => response.json())
+                    .then(json => {
+                        this.comments = json
+                    });
             },
-            addComment(comment) {
-                this.comments.push(comment);
+            removeComment(id) {
+                const url = 'http://localhost:5001/Comments/Delete?commentId=' + id
+                fetch(url)
+                    .then(response => {
+                            return response.text()
+                        })
+                        .then((data) => {
+                            console.log(data)
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        })
+                this.getComments();
+                //this.comments = this.comments.filter(c => c.id !== id)
+
             }
+            
         },
         
         components: {

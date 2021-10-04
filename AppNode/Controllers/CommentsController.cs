@@ -1,5 +1,6 @@
 ﻿using AppNode.Entities;
 using AppNode.Models;
+using AppNode.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -17,33 +18,40 @@ namespace AppNode.Controllers
         
 
         private readonly ILogger<CommentsController> _logger;
-        private readonly CommentsContext _context;
+        private readonly IDbService _dbService;
 
-        public CommentsController(ILogger<CommentsController> logger, CommentsContext context)
+        public CommentsController(ILogger<CommentsController> logger, IDbService dbService)
         {
             _logger = logger;
-            _context = context;
+            _dbService = dbService;
         }
 
         [HttpGet]
         public IEnumerable<Comments> GetComments()
         {
-            //not implemented
-            return _context.Comments.ToList();
+            return _dbService.GetComments();
         }
 
         
-        [HttpPost]
-        public string Add([FromBody] AddCommentRequest request)
+        [HttpGet]
+        public bool Add(string userName, string commentText)
         {
-            _context.Comments.Add(new Comments() { 
-                UserName = request.UserName,
-                CommentText = request.CommentText
-            });
+            try
+            {
+                _dbService.AddComment(userName, commentText);
+                return true;
+            }
+            catch(Exception e)
+            {
+                _logger.LogError("Exception: " + e);
+                return false;
+            }
+        }
 
-            _context.SaveChanges();
-
-            return "Success";
+        [HttpGet]
+        public void Delete(int commentId)
+        {
+            _dbService.DeleteComment(commentId);
         }
     }
 }
