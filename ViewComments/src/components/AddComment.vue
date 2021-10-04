@@ -1,8 +1,28 @@
 <template>
+    
+
     <form @submit.prevent="onSubmit">
-        <input type="text" v-model="userName" />
-        <input type="text" v-model="commentText" />
-        <button type="submit">Create</button>
+        <div class="label_1">
+            <label>User: </label>
+            <br>
+            <input type="text" v-model="userName" />
+
+        </div>
+        <br>
+        <div class="label_2">
+            <label>Comment: </label>
+            <br>
+            <div class="textarea">
+                <textarea style="width:200px; height:100px;" type="text" v-model="commentText" />
+            </div>
+            
+
+        </div>
+        <div class="button">
+            <button type="submit">Create</button>
+        </div>
+
+       
     </form>
 </template>
 <script>
@@ -41,6 +61,7 @@
                             this.comments = json
                         });
 
+                   
                     //const requestOptions = {
                     //    method: "POST",
                     //    headers: {
@@ -66,18 +87,25 @@
                     //        console.log(error)
                     //    })
 
-                    this.$emit('get-comment')
+                    this.$emit('add-comment', newComment)
                 }
             }
         }
     }
 </script>
 <style scoped>
-    form {
+    label_1 {
+        align-content: center;
         display: flex;
     }
-
-    input {
-        width: 400px;
+    label_2 {
+        align-content: center;
+        display: flex;
     }
+    
+    button {
+       margin-top:20px;
+    }
+
+
 </style>

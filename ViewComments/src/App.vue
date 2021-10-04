@@ -1,16 +1,14 @@
 <template>
     <div id="app">
-       <h1>Comments application</h1>
-        <AddComment
-                @get-comment="getComments"
-                    />
+        <h1>Comments application</h1>
+
+        
+        <AddComment @add-comment="addComment" />
         <hr>
-        <CommentsList
-                      v-if="comments.length"
+        <CommentsList v-if="comments.length"
                       v-bind:comments="comments"
                       @remove-comment="removeComment"
-                      @get-comment="getComments"
-        />
+                      @get-comment="getComments" />
         <p v-else>No comments!</p>
     </div>
 </template>
@@ -34,6 +32,9 @@
             this.getComments();
         },
         methods: {
+            addComment(comment) {
+                this.comments.push(comment);
+            },
             getComments() {
                 fetch('http://localhost:5001/Comments/GetComments')
                     .then(response => response.json())
@@ -53,8 +54,8 @@
                         .catch((error) => {
                             console.log(error)
                         })
-                this.getComments();
-                //this.comments = this.comments.filter(c => c.id !== id)
+               // this.getComments();
+               this.comments = this.comments.filter(c => c.id !== id)
 
             }
             

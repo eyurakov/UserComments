@@ -3,7 +3,7 @@
        <span v-bind:class="{done: comment.completed}">
           
            <strong>{{index + 1}}</strong>
-           {{comment.userName}},
+           {{comment.userName}}: 
 
            {{comment.commentText}}
        </span>
