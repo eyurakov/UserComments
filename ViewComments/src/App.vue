@@ -23,6 +23,7 @@
     export default {
         name: 'app',
         data() {
+
             return {
                 comments: []
             }
@@ -56,9 +57,7 @@
                         })
                // this.getComments();
                this.comments = this.comments.filter(c => c.id !== id)
-
             }
-            
         },
         
         components: {
@@ -68,7 +67,9 @@
 </script>
 
 <style>
-    #app{
+    #app {
+       
+    
         font-family: 'Avenir', Arial, Helvetica, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
