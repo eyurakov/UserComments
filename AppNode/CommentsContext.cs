@@ -1,6 +1,4 @@
 ﻿using AppNode.Models;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 
 namespace AppNode

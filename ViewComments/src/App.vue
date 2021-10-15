@@ -2,8 +2,7 @@
     <div id="app">
         <h1>Comments application</h1>
 
-        
-        <AddComment @add-comment="addComment" />
+        <AddComment @get-comments="getComments" />
         <hr>
         <CommentsList v-if="comments.length"
                       v-bind:comments="comments"
@@ -14,28 +13,22 @@
 </template>
 
 <script>
-    
     import CommentsList from '@/components/CommentsList'
     import AddComment from '@/components/AddComment'
+
     headers: {
         "Access-Control-Allow-Origin"
-             }
+    }
     export default {
         name: 'app',
         data() {
-
-            return {
-                comments: []
-            }
+            return { comments: [] }
         },
         mounted() {
-
             this.getComments();
         },
         methods: {
-            addComment(comment) {
-                this.comments.push(comment);
-            },
+
             getComments() {
                 fetch('http://localhost:5001/Comments/GetComments')
                     .then(response => response.json())
@@ -43,33 +36,36 @@
                         this.comments = json
                     });
             },
+
             removeComment(id) {
-                const url = 'http://localhost:5001/Comments/Delete?commentId=' + id
-                fetch(url)
+                const url = 'http://localhost:5001/Comments/Delete/' + id
+                const requestOptions = {
+                    method: "DELETE"
+                };
+                fetch(url, requestOptions)
                     .then(response => {
-                            return response.text()
-                        })
-                        .then((data) => {
-                            console.log(data)
-                        })
-                        .catch((error) => {
-                            console.log(error)
-                        })
-               // this.getComments();
-               this.comments = this.comments.filter(c => c.id !== id)
+                        return response.text()
+                    })
+                    .then((data) => {
+                        if (data) {
+                            this.getComments();
+                        }
+                        console.log(data)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
             }
         },
-        
+
         components: {
-           CommentsList, AddComment
+            CommentsList, AddComment
         }
     };
 </script>
 
 <style>
     #app {
-       
-    
         font-family: 'Avenir', Arial, Helvetica, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;

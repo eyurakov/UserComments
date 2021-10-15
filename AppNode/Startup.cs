@@ -1,15 +1,9 @@
 using AppNode.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AppNode
 {
@@ -26,16 +20,13 @@ namespace AppNode
         {
            
             services.AddControllers();
+
             services.AddSwaggerGen();
 
             services.AddScoped<CommentsContext>();
             services.AddScoped<IDbService, DbService>();
 
-            services.AddCors(o => o.AddDefaultPolicy(builder =>
-            {
-                builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:8080/", "http://localhost:5001/");
-
-            }));
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +36,7 @@ namespace AppNode
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseCors();
+            
             app.UseSwagger();
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
@@ -55,8 +46,9 @@ namespace AppNode
             });
 
             app.UseRouting();
-
-            app.UseAuthorization();
+            app.UseCors(builder => builder.AllowAnyOrigin()
+                             .AllowAnyHeader()
+                             .AllowAnyMethod());
 
             app.UseEndpoints(endpoints =>
             {

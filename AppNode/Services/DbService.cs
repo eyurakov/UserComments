@@ -1,8 +1,6 @@
 ﻿using AppNode.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace AppNode.Services
 {
@@ -16,9 +14,8 @@ namespace AppNode.Services
         }
 
         public IEnumerable<Comments> GetComments()
-        {
-            return _context.Comments.ToList();
-        }
+            => _context.Comments.ToList();
+
         public void AddComment(string userName, string commentText)
         {
             var comment = new Comments()
@@ -39,7 +36,7 @@ namespace AppNode.Services
                 _context.Comments.Remove(comment);
                 _context.SaveChanges();
             }
-            
+
         }
     }
 }

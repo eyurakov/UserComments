@@ -1,22 +1,17 @@
 ﻿using AppNode.Entities;
 using AppNode.Models;
 using AppNode.Services;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AppNode.Controllers
 {
-    [ApiController]
     [Route("[controller]/[action]")]
+    [ApiController]
     public class CommentsController : ControllerBase
     {
-        
-
         private readonly ILogger<CommentsController> _logger;
         private readonly IDbService _dbService;
 
@@ -28,30 +23,36 @@ namespace AppNode.Controllers
 
         [HttpGet]
         public IEnumerable<Comments> GetComments()
-        {
-            return _dbService.GetComments();
-        }
+            => _dbService.GetComments();
 
-        
-        [HttpGet]
-        public bool Add(string userName, string commentText)
+        [HttpDelete("{id}")]
+        public bool Delete(int id)
         {
             try
             {
-                _dbService.AddComment(userName, commentText);
+                _dbService.DeleteComment(id);
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                _logger.LogError("Exception: " + e);
+                _logger.LogError("Exception: " + e.Message.ToString());
                 return false;
             }
         }
 
-        [HttpGet]
-        public void Delete(int commentId)
+        [HttpPost]
+        public bool AddPost([FromBody] AddCommentRequest request)
         {
-            _dbService.DeleteComment(commentId);
+            try
+            {
+                _dbService.AddComment(request.UserName, request.CommentText);
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Exception: " + e.Message.ToString());
+                return false;
+            }
         }
     }
 }
